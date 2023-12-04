@@ -1,0 +1,78 @@
+    /*
+ * Name: Gavin Austin
+ * Course: SENG1120
+ * Student number: c3279166
+ */
+
+#include <cstdlib>
+#include "LinkedList.h"
+#include "Node.h"
+#include "Stack.h"
+using namespace std;
+
+    // Constructors
+    template <class data_type>
+    Stack<data_type>::Stack()
+    {
+        stackList = new LinkedList<data_type>();
+        StackLength = 0;
+    }
+    
+    
+    // Destructor
+    template <class data_type>
+    Stack<data_type>::~Stack(){
+        delete stackList;
+        StackLength = 0;
+    }
+    
+    template <class data_type>
+    void Stack<data_type>::push(const data_type& data)
+    {
+       
+        stackList->addToHead(data);                             // Adds a new node to the tail of the queue using the data supplied
+        StackLength++;                                          // Adds one to the length
+    }
+            
+    template <class data_type>
+    void Stack<data_type>::pop(){
+        stackList->removeHead();                                // Removes the head node of the linked list using the 'removehead' linked list function
+        StackLength--;                                          // Removes one from the Length
+    }
+
+    template <class data_type>
+   const int Stack<data_type>::size() {
+        return StackLength;                                     // Returns the length value of the stack
+    }
+
+    template <class data_type>
+     const data_type Stack<data_type>::top(){
+         int front = stackList->getHeadData();                 // Gets the data from the head node and returns it
+         return front;
+    }
+      
+    //Operator overloading
+    //Overloading cout <<
+    template <class data_type>
+    ostream& operator << (ostream& stream, Stack<data_type>& list) {
+        
+             Stack<data_type> newS;                            // Creates a temp Stack to use to hold the data of the main staac as we count it                                         
+
+              int nLength = list.size();                       // Sets a length variable that doesnt change as we remove nodes, this stops a seg fault
+
+             stream << "( ";                                   // ouputs teh starting bracket
+              for(int i = 0; i < nLength; i++){ 
+                  newS.push(list.top());                        // Pushes the data from the head of the main stack onto the temp stack
+                  stream << list.top() << " ";                  // outputs the data from the top of the new stack
+                  list.pop();                                   // removes the top of the main stack off the top
+                  }
+             stream << ")";
+             
+                for(int i = 1; i <= nLength; i++){              // Moves the data off the temp stack back onto the main stack
+                    list.push(newS.top());
+                    newS.pop();
+                }
+
+                return stream;                                  // Returns the stream
+       } 
+
